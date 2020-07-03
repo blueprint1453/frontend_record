@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 800px;
+        border: 1px solid red;
+        margin: 20px auto;
+      }
+      .flex-row {
+        display: flex;
+        margin-left: -10px;
+        margin-right: -10px;
+      }
+      .col {
+        flex: 1;
+        padding: 0 10px;
+      }
+     
+      .content {
+        background: rgb(240, 147, 147);
+        height: 200px;
+      }
+    </style>
+    <style>
+    .parent {
+      width: 800px;
+      display: flex;
+      border: 1px solid red;
+      margin: 20px auto;
+    }
+    .son {
+      width: 25%;
+      height: 100px;
+      background: #ccc;
+    }
+    .son:nth-child(2), .son:nth-child(3) {
+      position: relative;
+      left: 25%;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="flex-row">
+        <div class="col">
+          <div class="content"></div>
+        </div>
+        <div class="col">
+          <div class="content"></div>
+        </div>
+        <div class="col">
+          <div class="content"></div>
+        </div>
+        <div class="col">
+          <div class="content"></div>
+        </div>
+      </div>
+    </div>
+    <div class="parent">
+      <div class="son"></div>
+      <div class="son"></div>
+      <div class="son"></div>
+    </div>
+  </body>
+</html>
