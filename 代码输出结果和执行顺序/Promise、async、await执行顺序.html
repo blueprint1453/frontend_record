@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      :root {
+        --blue: #007bff;
+      }
+      body {
+        /* background: blue */
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      /**
+       * 注意浏览器上执行的顺序跟node执行顺序略有区别
+       */
+      async function async1() {
+        console.log("async1 start");
+        await async2();
+        console.log("async1 end");
+      }
+
+      async function async2() {
+        console.log("async2 start");
+        await async3();
+        console.log("async2 end");
+      }
+
+      async function async3() {
+        console.log("async3 start");
+      }
+
+      setTimeout(function() {
+        console.log("setTimeout0");
+      }, 0);
+
+      console.log("start");
+
+      async1();
+
+      new Promise(function(resolve) {
+        console.log("Promise1");
+        resolve();
+      }).then(function() {
+        console.log("Promise2");
+      });
+
+      console.log("all end");
+
+      // chrome浏览器输出顺序
+      // VM402:21 start
+      //  async1 start
+      //  async2 start
+      //  async3 start
+      //  Promise1
+      //  all end
+      //  async2 end
+      //  Promise2
+      //  async1 end
+      //  setTimeout0
+
+
+      // node环境输出顺序
+      //  start
+      // async1 start
+      // async2 start
+      // async3 start
+      // Promise1
+      // all end
+      // Promise2
+      // async2 end
+      // async1 end
+      // setTimeout0
+    </script>
+  </body>
+</html>

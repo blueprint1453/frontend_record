@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <img src="" alt="">
+    </div>
+    <script>
+      let xhr = new XMLHttpRequest();
+      xhr.open(
+        "get",
+        "./img/01.png",
+        true
+      );
+      xhr.responseType = "blob";
+      xhr.withCredentials = true
+      xhr.onload = function(res) {
+        if (this.status == 200) {
+          var blob = this.response;
+          var img = document.createElement("img");
+          img.onload = function(e) {
+            // window.URL.revokeObjectURL(img.src); // 清除释放
+            document.body.appendChild(img)
+          };
+          //img.src为Blob格式的img资源
+          img.src = window.URL.createObjectURL(blob);
+          console.log(img.src);
+        }
+      };
+      xhr.send();
+    </script>
+  </body>
+</html>

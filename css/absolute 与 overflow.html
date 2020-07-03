@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      /* 如果overflow不是定位元素，同时绝对定位元素和overflow容器之间也没有定位元素，则overflow无法对absolute
+元素进行剪裁。 */
+      .box1 {
+        height: 300px;
+        width: 400px;
+        border: 1px solid red;
+        overflow: hidden;
+      }
+      .box1 .abs {
+        position: absolute;
+        left: 400px;
+        top: 100px;
+        width: 150px;
+        height: 150px;
+        background: lightblue;
+      }
+
+      /* 如果overflow的属性值不是hidden而是auto或者scroll，并且不是定位元素，即使绝对定位元素高宽比overflow元素高宽还要大，也
+都不会出现滚动条。 */
+      .box2 {
+        height: 300px;
+        width: 400px;
+        border: 1px solid red;
+        /* overflow: scroll; */
+        overflow: auto;
+      }
+      .box2 .abs {
+        position: absolute;
+        left: -300px;
+        top: 300px;
+        width: 500px;
+        height: 500px;
+        background: lightblue;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="box1">
+      <div class="abs"></div>
+    </div>
+
+    <div class="box2">
+      <div class="abs"></div>
+    </div>
+
+  </body>
+</html>

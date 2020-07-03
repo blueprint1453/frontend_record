@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  .container {
+    position: relative;
+    width: 600px;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 100px auto;
+  }
+  .list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    font-size: 0;
+  }
+  .item {
+    width: 600px;
+    height: 200px;
+    display: inline-block;
+    background: #83d7ec;
+    font-size: 30px;
+    text-align: center;
+    line-height: 200px;
+    color: red;
+    margin: 0;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="list">
+      <div class="item">hello world</div>
+      <div class="item">hello world</div>
+    </div>
+  </div>
+  <script>
+    let container = document.querySelector('.container')
+    let list = document.querySelector('.list')
+    let item = list.querySelectorAll('.item')
+    let baseWidth = container.offsetWidth
+    let speed = 2
+    let addSpeed = 0
+
+    setInterval(() => {
+      let random = Math.random()*10
+      if ( random < 2.5) {
+        addSpeed = -1
+      } else if (random > 7.5) {
+        addSpeed = 2
+      } else {
+        addSpeed = 0
+      }
+      
+    },   3000)
+
+    function animate() {
+      console.log('animate run')
+      console.log(list.offsetLeft)
+      let left = parseInt(list.style.left) || list.offsetLeft
+      let nextLeft = left - (speed + addSpeed)
+      console.log('addSpeed', addSpeed)
+      console.log(nextLeft, baseWidth)
+      if (baseWidth - Math.abs(nextLeft) < speed + addSpeed) {
+        nextLeft = 0
+      }
+      list.style.left = nextLeft + 'px'
+      requestAnimationFrame(animate)
+    }
+    animate()
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .box {
+    width: 600px;
+    margin: 0 auto;
+    height: 600px;
+    background: lightblue;
+  }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+  <script>
+     setTimeout(() => {
+       console.log('settimeout')
+     }, 0);
+    var script = document.createElement('script')
+    script.src = './index.js'
+    document.body.appendChild(script)
+     function f1() {
+       var m = 0;
+       while(m < 100000000) {
+         m++
+       }
+       console.log('m ', m)
+     }
+     f1()
+    
+  </script>
+</body>
+</html>

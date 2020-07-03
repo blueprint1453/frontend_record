@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function Interceptor() {
+      this.callbacks = []
+    }
+    Interceptor.prototype.use = function(fn1, fn2) {
+      fn1 = typeof fn1 === 'function' ? fn1 : function(config) { return config}
+      fn2 = typeof fn2 === 'function' ? fn2 : function(config) { return config}
+      this.callbacks.push(fn1, fn2)
+    }
+    const createAxios = function() {
+      let axios = {}
+      let interceptors = {}
+      let requestInterceptor = new Interceptor()
+      let responseInterceptor = new Interceptor()
+      let request = function(config) {
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            let age = config.age
+            if (age > 20) {
+              resolve({
+                data: 'success'
+              })
+            } else {
+              reject({
+                data: 'fail'
+              })
+            }
+          }, 1000)
+        })
+      }
+      let requestEnhencer = function() {
+        return function(config) {
+          let fns = [...requestInterceptor.callbacks, request, undefined, ...responseInterceptor.callbacks]
+          console.log(fns)
+          let p = Promise.resolve(config)
+          while(fns.length) {
+            p = p.then(fns.shift(), fns.shift())
+          }
+        }
+      }
+      interceptors.request = requestInterceptor
+      interceptors.response = responseInterceptor
+      axios = {
+        interceptors,
+        request: requestEnhencer()
+      }
+      return axios
+    }
+
+    let config = {
+      name: 'jack',
+      age: 21
+    }
+    let axios = createAxios()
+    axios.interceptors.request.use((config) => {
+      console.log(config)
+      config.req1 = 'req1'
+      return config
+    })
+    axios.interceptors.request.use((config) => {
+      console.log(config)
+      config.req1 = 'req2'
+      return config
+    })
+    axios.interceptors.response.use((response) => {
+      console.log(response)
+      response.res1 = 'res1'
+      return response
+    })
+    axios.interceptors.response.use((response) => {
+      console.log(response)
+      response.res1 = 'res1'
+      return response
+    })
+
+    console.log(axios.interceptors, axios.request)
+    axios.request(config)
+  </script>
+</body>
+</html>

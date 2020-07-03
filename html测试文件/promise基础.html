@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      Promise.resolve(10).then(function(res) {
+        console.log(res);
+      });
+
+      const f = () => {
+        console.log("now");
+        console.log(a)
+      }
+      (async () => f())().catch(error => console.log(error));
+      console.log("next");
+
+      // let p2 = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     reject(10)
+      //   }, 100);
+      // })
+      // p2.then(res => {
+      //   console.log(res)
+      // }).catch(error => {
+      //   console.log(error)
+      //   return setTimeout(() => {
+      //     console.log('setTimeout in catch')
+      //   }, 0)
+      // }).finally(() => {
+      //   console.log('finally finally finally finally finally')
+      // }) 
+
+      let p3 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(5)
+        })
+      })
+
+      p3.then(res=> {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(10)
+          }, 100)
+        })
+      }).then(res => {
+        console.log('then then', res)
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(100)
+            console.log('then then 100')
+          }, 100)
+        })
+      }).catch(error => {
+        console.log(error)
+      }).finally((res) => {
+        console.log('finally finally', res)
+      }).then(res=>console.log('finally then'))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .box {
+    width: 200px;
+    height: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: lightblue;
+    cursor: pointer;
+  }
+  </style>
+</head>
+<body>
+  <div class="box">
+    Drag me
+  </div>
+  <script src="./require/index.js"  ></script>
+  <script>
+  var box = document.querySelector('.box')
+  var x = 0;
+  var y = 0;
+  let drag = false
+  box.onmousedown = function(e) {
+    console.log('mousedown', e)
+    drag = true
+    x = e.pageX - box.offsetLeft
+    y = e.pageY - box.offsetTop
+  }
+  box.onmousemove = function(e) {
+    console.log('mousemove', e)
+    if (!drag) return
+    box.style.left = (e.pageX - x) + 'px'
+    box.style.top = (e.pageY - y ) + 'px'
+  }
+  window.onmouseup = function(e) {
+    console.log('mouseup', e)
+    drag = false
+    x = 0
+    y = 0
+  }
+  </script>
+</body>
+</html>

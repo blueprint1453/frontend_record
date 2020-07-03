@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .parent1 {
+        background: linear-gradient();
+        width: 800px;
+        height: 400px;
+        margin: 20px auto;
+        border: 1px solid red;
+      }
+      .parent1 .left {
+        float: left;
+        width: 200px;
+        height: 100%;
+        background: lightblue;
+      }
+      .parent1 .right {
+        height: 100%;
+        margin-left: 200px;
+        background: lightpink;
+      }
+
+      .parent2 {
+        display: flex;
+        width: 800px;
+        height: 400px;
+        margin: 20px auto;
+        border: 1px solid red;
+      }
+      .parent2 .left {
+        width: 200px;
+        height: 100%;
+        background: lightblue;
+      }
+      .parent2 .right {
+        flex: 1;
+        height: 100%;
+        background: lightpink;
+      }
+
+      .parent3 {
+        width: 800px;
+        height: 400px;
+        margin: 20px auto;
+        border: 1px solid red;
+        position: relative;
+      }
+      .parent3 .left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100%;
+        background: lightblue;
+      }
+      .parent3 .right {
+        height: 100%;
+        margin-left: 200px;
+        background: lightpink;
+      }
+
+
+      .parent4 {
+        width: 800px;
+        height: 400px;
+        margin: 20px auto;
+        border: 1px solid red;
+        font-size: 0;  /*去除行内块元素间的空白**/
+      }
+      .parent4 .left {
+        display: inline-block;
+        vertical-align: top;
+        width: 200px;
+        height: 100%;
+        background: lightblue;
+      }
+      .parent4 .right {
+        display: inline-block;
+        vertical-align: top;
+        height: 100%;
+        width: calc(100% - 200px);
+        background: lightpink;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 浮动 -->
+    <div class="parent1">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+    <!-- flex布局 -->
+    <div class="parent2">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+
+    <!-- 绝对定位 -->
+    <div class="parent3">
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+
+    <!-- 行内块 -->
+    <div class="parent4">
+      <div class="left"></div>
+      <div class="right">ddddddddd</div>
+    </div>
+  </body>
+</html>

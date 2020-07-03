@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const middleware1 = (req, res, next) => {
+        console.log("middleware1 start");
+        // 所有的中间件都应返回一个Promise对象
+        // Promise.resolve()方法接收中间件返回的Promise对象，供下层中间件异步控制
+        return next().then(res => {
+          console.log("1", res);
+          return "middleware1 end";
+        });
+      };
+
+      const middleware2 = (req, res, next) => {
+        console.log("middleware2 start");
+        // 所有的中间件都应返回一个Promise对象
+        // Promise.resolve()方法接收中间件返回的Promise对象，供下层中间件异步控制
+        // console.log("next()",next())
+        return next().then(res => {
+          console.log("2", res);
+          return "middleware2 end";
+        });
+      };
+      const middleware3 = (req, res, next) => {
+        console.log("middleware3 start");
+        return next().then(res => {
+          console.log("3", res);
+          return "middleware3 end";
+        });
+      };
+
+      const middlewares = [middleware1, middleware2, middleware3];
+
+      function run(req, res) {
+        const next = () => {
+          const middleware = middlewares.shift();
+          if (middleware) {
+            //   console.log("next",next)
+            // 将middleware(req, res, next)包装为Promise对象
+            return Promise.resolve(middleware(req, res, next));
+          } else {
+            return Promise.resolve("结束");
+          }
+        };
+        next();
+      }
+      run(); // 模拟一次请求发起
+    </script>
+  </body>
+</html>

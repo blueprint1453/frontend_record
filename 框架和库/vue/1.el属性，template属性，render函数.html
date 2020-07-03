@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h2>{{title}}</h2>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+      // 1. 只有el  template对应的dom内容会插入到#app里面
+      // new Vue({
+      //   el: '#app',
+      //   data() {
+      //     return {
+      //       title: 'hello user'
+      //     }
+      //   },
+      //   beforeCreate() {
+      //     console.log('beforeCreate')
+      //   },
+      //   created() {
+      //     console.log('created')
+      //   },
+      //   beforeMount() {
+      //     console.log('beforeMount')
+      //   },
+      //   mounted() {
+      //     console.log('mounted')
+      //   },
+      // })
+
+      // // 2. 只有template 需要调用$mount才会渲染出来 template对应的dom内容会将#app替换调
+      // var vm =  new Vue({
+      //   template: "<h2>{{title}}</h2>",
+      //   data() {
+      //     return {
+      //       title: "hello user"
+      //     };
+      //   },
+      //   beforeCreate() {
+      //     console.log("beforeCreate");
+      //   },
+      //   created() {
+      //     console.log("created");
+      //   },
+      //   beforeMount() {
+      //     console.log("beforeMount");
+      //   },
+      //   mounted() {
+      //     console.log("mounted");
+      //   }
+      // });
+      // console.log(vm)
+      // console.log(vm.$mount('#app'))
+
+      // 3.有el template  template对应的dom内容会将#app替换调
+      // var vm =  new Vue({
+      //   el: '#app',
+      //   template: "<h2>{{title}}</h2>",
+      //   data() {
+      //     return {
+      //       title: "hello user"
+      //     };
+      //   },
+      //   beforeCreate() {
+      //     console.log("beforeCreate");
+      //   },
+      //   created() {
+      //     console.log("created");
+      //   },
+      //   beforeMount() {
+      //     console.log("beforeMount");
+      //   },
+      //   mounted() {
+      //     console.log("mounted");
+      //   }
+      // });
+
+      // // 4.只有render 必须再手动挂载才能渲染 template对应的dom内容会将#app替换调
+      // var vm = new Vue({
+      //   render: function(createElement) {
+      //     // return createElement('h1', '我是render出来的HTML，年龄{{age}}');//不能使用“Mustache”语法 (双大括号)
+      //     return createElement("h1", "我是render出来的HTML，年龄" + this.title);
+      //   },
+      //   data() {
+      //     return {
+      //       title: "hello user"
+      //     };
+      //   },
+      //   beforeCreate() {
+      //     console.log("beforeCreate");
+      //   },
+      //   created() {
+      //     console.log("created");
+      //   },
+      //   beforeMount() {
+      //     console.log("beforeMount");
+      //   },
+      //   mounted() {
+      //     console.log("mounted");
+      //   }
+      // });
+      // vm.$mount('#app');
+
+
+      // 5.有el, render 可以直接渲染出来 template对应的dom内容会将#app替换调
+      var vm = new Vue({
+        el: '#app',
+        render: function(createElement) {
+          // return createElement('h1', '我是render出来的HTML，年龄{{age}}');//不能使用“Mustache”语法 (双大括号)
+          return createElement("h1", "我是render出来的HTML，年龄" + this.title);
+        },
+        data() {
+          return {
+            title: "hello user"
+          };
+        },
+        beforeCreate() {
+          console.log("beforeCreate");
+        },
+        created() {
+          console.log("created");
+        },
+        beforeMount() {
+          console.log("beforeMount");
+        },
+        mounted() {
+          console.log("mounted");
+        }
+      });
+      // 优先级 render > template > el
+      
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      ///redux 源码compose的实现
+      // const composeFn = (...funcs) => {
+      //   return funcs.reduce((a, b) => (...args) => a(b(...args)))
+      // }
+      // const f1 = function() {
+      //   console.log('run f1')
+      //   // do something
+      // }
+      // const f2 = function() {
+      //   console.log('run f2')
+      //   // do something
+      // }
+      // const f3 = function() {
+      //   console.log('run f3')
+      //   // do something
+      // }
+      // let current = f1
+      // let next = f2
+      // current = function(...args) {
+      //   return f1(f2())
+      // }
+      // next = f3
+      // current = function(...args) {
+      //   return current(f3(...args))
+      // }
+
+      const compose = (...fns) => {
+        let newFns = []
+        for(let f of fns) {
+          if (typeof f === 'function'){
+            newFns.push(f)
+          }
+        }
+        if (newFns.length === 0) {
+          return function (){}
+        }
+        if (newFns.length === 1) {
+          return newFns[0]
+        }
+        newFns = newFns.reverse()
+        return function(s) {
+          newFns.reduce((a, b) => b(a), s)
+        }
+      }
+      const applyMiddleware = function(...middlewares) {
+        return function(createStore) {
+          return function(reducer, initialState) {
+            const store =  createStore(reducer, initialState)
+            let dispatch = store.dispatch
+           
+            middlewares.forEach(middleware => (dispatch = middleware(store)(dispatch)))
+            return {
+              ...store,
+              dispatch
+            }
+          }
+        }
+      }
+      const createStore = function(reducer, initialState, enhencer) {
+        const store = {};
+        let state;
+        let subscribeCallbacks = [];
+        let currentListeners = [];
+        let nextListeners = currentListeners;
+        let isDispatch = false;
+        const initialAction = { type: "INIT" };
+
+        if (initialState && typeof initialState !== "function") {
+          state = initialState;
+        }
+
+        if (enhencer === "undefined" && typeof initialState === "function") {
+          enhencer = initialState;
+        }
+
+        if (enhencer) {
+          return enhencer(createStore)(reducer, initialState);
+        }
+
+        const getState = function() {
+          return state;
+        };
+        let dispatch = function(action) {
+          if (isDispatch) {
+            console.error("could not dispatch a action when reducer");
+            return;
+          }
+          try {
+            isDispatch = true;
+            state = reducer(state, action);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            isDispatch = false
+          }
+          let listeners = (currentListeners = nextListeners)
+          for (let f of listeners) {
+            f()
+          }
+        };
+        const subscribe = function(fn) {
+          if (isDispatch) {
+            console.error("could not call store.subscribe() while the reducer is executing.");
+            return
+          }
+          let isSubscribe = true;
+          if (nextListeners === currentListeners) {
+            nextListeners = currentListeners.slice()
+          }
+          nextListeners.push(fn);
+          return function unsubscribe() {
+            if (!isSubscribe) return;
+            if (nextListeners === currentListeners) {
+              nextListeners = currentListeners.slice()
+            }
+            let index = nextListeners.findIndex(f => f === fn);
+            nextListeners.splice(index, 1);
+            isSubscribe = false;
+          };
+        };
+        store.dispatch = dispatch;
+        store.getState = getState;
+        store.subscribe = subscribe;
+
+        store.dispatch(initialAction);
+        return store;
+      };
+      
+      const reducer = (state, action) => {
+        return state
+      }
+
+      // test
+      const middleware1 = store => next => action => {
+        console.log('middleware1 start', action)
+        let result = next(action)
+        console.log('middleware1 end')
+        return result
+      }
+      const middleware2 = store => next => action => {
+        console.log('middleware2 start', action)
+        let result = next(action)
+        console.log('middleware2 end')
+        return result
+      }
+      const middleware3 = store => next => action => {
+        console.log('middleware3 start', action)
+        let result = next(action)
+        console.log('middleware3 end')
+        return result
+      }
+      
+      let store = createStore(reducer, 0, applyMiddleware(middleware3, middleware2, middleware1))
+      const unsubscribe1 = store.subscribe(() => {
+        console.log('subscribe')
+      })
+      console.log(store.dispatch)
+      store.dispatch({type: 'AA'})
+
+      var person = {
+        name: 'jack',
+        age: 0
+      }
+      person.eat = function() {
+        // do something
+      }
+      eat = obj.eat
+      // 在执行eat之前要做点别的事 比如任务task1 task2 task3
+      var f = function(f) {
+        // do task1
+        // do task2
+        // do task3
+        eat()
+      }
+
+      var next = function() {
+        next()
+      }
+
+      // 在执行任务f时要做点别的事情 而且要使用到obj
+      var f11 = function(obj) {
+        return function(f) {
+          // do something
+          f()
+        }
+      }
+    </script>
+  </body>
+</html>

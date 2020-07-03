@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  const middleware01 = (req, res, next) => {
+    console.log('middleware01')
+    next()
+  }
+  
+  const middleware02 = (req, res, next) => {
+    console.log('middleware02')
+    next()
+  }
+
+  const middleware03 = (req, res, next) => {
+    console.log('middleware03')
+    next()
+  }
+
+  const middlewares = [middleware01, middleware02, middleware03]
+  const run =(req, res) => {
+    const next = () => {
+      const middleware = middlewares.shift()
+      typeof middleware === 'function' && middleware(req, res, next)
+    }
+    next()
+  }
+
+  run()
+
+  </script>
+</body>
+</html>

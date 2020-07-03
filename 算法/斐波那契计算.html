@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 采用缓存
+      */
+      function fiboFn2(n) {
+        let cache = {};
+        return function fn(n) {
+          let result;
+          if (n === 1 || n === 2) {
+            result = 1;
+          } else {
+            result = fn(n - 1) + fn(n - 2);
+          }
+          cache[n] = result;
+          return result;
+        };
+      }
+
+      /**
+       * 采用动态路径规划法
+      */
+      function fiboFn3(n) {
+        if (n === 1 || n === 2) return 1;
+        let temp = [0, 1];
+        for (i = 2; i <= n; i++) {
+          temp[i] = temp[i - 2] + temp[i - 1];
+        }
+        console.log(temp[n]);
+        return temp[n];
+      }
+    </script>
+  </body>
+</html>

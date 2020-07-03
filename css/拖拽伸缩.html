@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .container {
+    position: relative;
+    display: flex;
+    height: 400px;
+    width: 800px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+  }
+  .left {
+    width: 200px;
+    height: 100%;
+    margin-right: 12px;
+    background: lightblue;
+  }
+  .drag-bar {
+    position: absolute;
+    left: 200px;
+    top: 0;
+    width: 12px;
+    height: 100%;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    cursor: col-resize;
+    background: #fcfcfc;
+  }
+  .drag-bar:hover {
+    background: #eee;
+  }
+  .right {
+    flex: 1;
+    height: 100%;
+    background: lightgreen;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left"></div>
+    <div class="drag-bar"></div>
+    <div class="right"></div>
+  </div>
+  <script>
+
+    var leftDom = document.querySelector('.left')
+    var rightDom = document.querySelector('.right')
+    var dragBar = document.querySelector('.drag-bar')
+    var x = 0
+    var y = 0
+    var isMouseDown = false
+    dragBar.addEventListener('mousedown', handlerMouseDown)
+    window.addEventListener('mouseup', handlerMouseUp)
+    dragBar.addEventListener('mousemove', handlerMouseMove)
+    function handlerMouseDown(e) {
+      isMouseDown = true
+      console.log(e.pageX)
+      x = e.pageX 
+    }
+    function handlerMouseUp(e) {
+      console.log(e.pageX)
+      isMouseDown = false
+      x = 0
+    }
+    function handlerMouseMove(e) {
+      if (!isMouseDown) return
+      let left = dragBar.offsetLeft
+      var newLeft = left + e.pageX - x
+      dragBar.style.left = newLeft + 'px'
+      leftDom.style.width = newLeft + 'px'
+      x = e.pageX
+    }
+  </script>
+</body>
+</html>

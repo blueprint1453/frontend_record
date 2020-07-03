@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var f1 = function(config) {
+        config.f1 = "f1";
+        return config;
+      };
+      var f2 = function(error) {
+        config.f1 = "f2";
+        return config;
+      };
+      var f3 = function(config) {
+        config.f1 = "f3";
+        return config;
+      };
+      var f4 = function(error) {
+        config.f1 = "f4";
+        return config;
+      };
+      var f5 = function(config) {
+        config.f1 = "f5";
+        return config;
+      };
+      var f6 = function(error) {
+        config.f1 = "f6";
+        return config;
+      };
+      let config = {
+        method: "get",
+        params: {
+          name: "jack",
+          age: 10
+        }
+      };
+      let promise = Promise.resolve(config);
+      let chain = [f1, f2, f3, f4, f5, f6];
+      while (chain.length) {
+        console.log(config);
+        promise = promise.then(chain.shift(), chain.shift());
+        console.log('while ', promise)
+      }
+      console.log("789");
+
+      new Promise(resolve => {
+        console.log("resolve");
+        return "resolve";
+      });
+      console.log("end");
+    </script>
+  </body>
+</html>

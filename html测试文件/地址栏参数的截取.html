@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var url1 =
+        "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&rsv_t=980cJrz9k35Si18%2FygE9oWTTEcsQ2%2BAXPLDkhWADNtSOwnErnT4VDcgCgwc&rqlang=cn&rsv_dl=tb&rsv_enter=1&rsv_sug3=17";
+
+      // 截取url的所有的参数 返回一个对象集合
+      function getUrlParam(url) {
+        var urlParamReg = /(?<=[\?|\&])(\w+?)=([^&]*)&?/g;
+        var obj = {};
+        url.replace(urlParamReg, (match, $1, $2) => {
+          obj[$1] = decodeURIComponent($2);
+          console.log(match, $1, obj[$1]);
+          return match;
+        });
+        return obj;
+      }
+
+      console.log(getUrlParam(url1).rsv_bp);
+
+      // 截取url的单个参数的值
+      function getUrlSingleParam(url, key) {
+        var str = "(?<=[\?\&])" + key + "=" + "([^&]*)&?";
+        console.log(str);
+        var reg = new RegExp(str);
+        var match = url.match(reg);
+        return match[1];
+      }
+
+      console.log(getUrlSingleParam(url1, "tn"));
+    </script>
+  </body>
+</html>

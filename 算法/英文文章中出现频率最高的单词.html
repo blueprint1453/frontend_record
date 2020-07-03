@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let findMostWord = function(article) {
+        let str = article.trim().toLowerCase();
+        let wordlist = str.match(/[a-z]+/g);
+        console.log(wordlist);
+        let maxNum = 0;
+        let maxWord = null;
+        let visited = [];
+        wordlist.forEach(word => {
+          if (visited.indexOf(word) === -1) {
+            visited.push(word);
+            let reg = new RegExp("\\b" + word + "\\b", "g");
+            let count = str.match(reg).length;
+            if (count > maxNum) {
+              maxNum = count;
+              maxWord = word;
+            }
+          }
+        });
+        console.log([maxWord, maxNum]);
+        return [maxWord, maxNum];
+      };
+
+      var article = `A while back a came across a really nice menu on Madeleine Dalla’s
+       incredible website that was infinitely scrollable. I wondered how that was achieved
+       and after searching for existing solutions, I found this great demo by Vincent 
+       Orback on Codepen.It shows how to pull off that effect with sections on a page.
+       I wanted to use his script to make it work for a menu.
+
+       hello world, hello world, hello world, hello world, hello world, hello
+       `;
+
+      findMostWord(article); // ['hello', 6]
+
+
+      // 一道常被人轻视的前端 JS 面试题
+      function Foo() {
+        getName = function() {
+          console.log(1);
+        };
+        console.log('Foo', this)
+        return this;
+      }
+      Foo.getName = function() {
+        console.log(2);
+      };
+      Foo.prototype.getName = function() {
+        console.log(3);
+      };
+      var getName = function() {
+        console.log(4);
+      };
+      function getName() {
+        console.log(5);
+      }
+
+      //请写出以下输出结果：
+      Foo.getName(); // 2
+      getName(); // 4
+      Foo().getName(); // 1
+      getName(); // 1
+      new Foo.getName(); // 2
+      new Foo().getName(); // 3
+      new new Foo().getName(); // 3
+
+
+    </script>
+  </body>
+</html>

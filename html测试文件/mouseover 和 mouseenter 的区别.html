@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .box1 {
+        width: 400px;
+        height: 400px;
+        margin: 0 auto;
+        border: 1px solid lightblue;
+      }
+      .box1 div {
+        width: 200px;
+        height: 200px;
+        border: 1px solid lightgreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box1">
+      <div></div>
+    </div>
+    <div class="box2">
+      <div></div>
+    </div>
+
+    <script>
+      // mouseenter和mouseover都是在鼠标移动到元素上时会触发，
+      // mouseover会冒泡，也就是鼠标移入子元素时依然会触发父元素的mouseover事件，
+      // mouseenter不会冒泡，也就是鼠标移入子元素时不会触发父元素的mouseenter事件
+
+      // mouseout和mouseleave的区别参考mouseover和mouseenter的区别
+      
+      console.log('run')
+      var box1 = document.querySelector('.box1')
+      var div1 = box1.querySelector('div')
+      box1.addEventListener('mouseenter', function(e) {
+        console.log('box1 mounseenter')
+      })
+      box1.addEventListener('mouseleave', function(e) {
+        console.log('box1 mouseleave')
+      })
+      
+
+      box1.addEventListener('mouseover', function(e) {
+        console.log('box1 mouseover')
+      })
+      box1.addEventListener('mouseout', function(e) {
+        console.log('box1 mouseout')
+      })
+    </script>
+  </body>
+</html>

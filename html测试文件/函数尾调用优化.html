@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // ES6 的尾调用优化只在严格模式下开启
+      // 1. 蹦床函数实现尾调用优化
+      function trampoline(f) {
+        while (f && f instanceof Function) {
+          f = f();
+        }
+        return f;
+      }
+      function sum(x, y) {
+        if (y > 0) {
+          return sum.bind(null, x + 1, y - 1);
+        } else {
+          return x;
+        }
+      }
+      trampoline(sum(1, 6));
+
+      // 2. 阶乘-未使用尾递归优化的例子 函数不停调用自身 调用帧会不断增加，最终导致内存爆满
+      function factorial(n) {
+        if (n === 1) return 1;
+        return n * factorial(n - 1);
+      }
+      factorial(1000); // 120
+
+      // 2. 阶乘-使用尾递归优化的例子
+      function factorial2(n, total = 1) {
+        if (n === 1) return total;
+        return factorial2(n - 1, total * n);
+      }
+      factorial2(8); // 120
+
+      // 非尾递归的 Fibonacci 数列实现
+      function Fibonacci(n) {
+        if (n <= 1) {
+          return 1;
+        }
+        return Fibonacci(n - 1) + Fibonacci(n - 2);
+      }
+      Fibonacci(10); // 89
+      // Fibonacci(100); // 超时
+
+      // 尾递归的 Fibonacci 数列实现
+      function Fibonacci2(n, ac1 = 1, ac2 = 1) {
+        if (n <= 1) {
+          return ac2;
+        }
+        return Fibonacci2(n - 1, ac2, ac2 + ac1);
+      }
+      Fibonacci2(10); // 89
+      let a = 1;
+      // Fibonacci2(100); // 超时
+      
+
+      // 真正的尾递归优化
+      function tco(f) {
+        var value;
+        var active = false;
+        var accumulated = [];
+
+        return function accumulator() {
+          accumulated.push(arguments);
+          if (!active) {
+            active = true;
+            while (accumulated.length) {
+              value = f.apply(this, accumulated.shift());
+            }
+            active = false;
+            return value;
+          }
+        }
+      }
+
+      var sum = tco(function(x, y) {
+        if (y > 0) {
+          return sum(x + 1, y - 1);
+        } else {
+          return x;
+        }
+      })
+
+      sum(1, 6)
+    </script>
+  </body>
+</html>

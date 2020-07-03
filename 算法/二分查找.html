@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 递归方法
+   function bindaryFind(arr, target, start = 0, end = arr.length - 1) {
+     let n = Math.floor((end + start) / 2)
+     if (arr[n] === target) {
+       return n
+     }
+     else if (arr[n] < target) {
+       return bindaryFind(arr, target, n + 1, end)
+       
+     }
+     else if (arr[n] > target) {
+      return bindaryFind(arr, target, start, n - 1)
+     }
+     return -1
+   }
+
+   const arr = [2, 10, 17, 29, 53, 69, 78, 92, 106, 120, 132, 141, 150, 160, 180, 190, 200, 210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360]
+   let start = Date.now()
+   const index = bindaryFind(arr, 17)
+   console.log(index)
+   console.log(Date.now() - start)
+   
+   // 循环方法
+   function bindaryFind2(arr, target) {
+     let start = 0
+     let end = arr.length - 1
+     let n
+     while(start <= end) {
+      n = Math.floor((end + start) / 2)
+       if (arr[n] === target) {
+         return n
+       }
+       if (arr[n] < target) {
+         start = n + 1
+       }
+       if (arr[n] > target) {
+         end = n - 1
+       }
+     }
+     return -1
+   }
+   console.log(bindaryFind2(arr, 69))
+  </script>
+</body>
+</html>

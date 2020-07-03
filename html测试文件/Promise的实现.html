@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // let p1 = new Promise((resolve, reject) => {
+      //   let value = Math.random()*10
+      //   if (value >= 5) {
+      //     resolve(value)
+      //   } else {
+      //     reject(value)
+      //   }
+      // })
+      // p1.then(res => {
+      //   console.log('then 1', res)
+      // }, error => {
+      //   console.log('error', res)
+      // })
+      // p1.then(res => {
+      //   console.log('then 2', res)
+      // }, error => {
+      //   console.log('error', res)
+      // })
+
+      const PENDING = "pending";
+      const FULFILLED = "fulfilled";
+      const REJECTED = "rejected";
+
+      function Promise(executor) {
+        this.status = PENDING;
+        this.value = null;
+        this.reason = null;
+        this.resolveCallbacks = [];
+        this.rejectCallbacks = [];
+        let that = this;
+
+        function resolve(value) {
+          if (that.status === PENDING) {
+            that.value = value;
+            that.status = FULFILLED;
+            that.resolveCallbacks.forEach(callback => {
+              callback(that.value);
+            });
+          }
+        }
+        function reject(reason) {
+          if (that.status === PENDING) {
+            that.reason = reason;
+            that.status = REJECTED;
+
+            that.rejectCallbacks.forEach(callback => {
+              callback(that.reason);
+            });
+          }
+        }
+        try {
+          executor(resolve, reject);
+        } catch (error) {
+          reject(error);
+        }
+      }
+
+      Promise.prototype.then = function(onFulfilled, onRejected) {
+        let onRealFulfilled = onFulfilled;
+        let onRealRejected = onRejected;
+        let that = this;
+
+        if (typeof onFulfilled !== "function") {
+          onRealFulfilled = function(value) {
+            return value;
+          };
+        }
+
+        if (typeof onRejected !== "function") {
+          onRealRejected = function(reason) {
+            throw reason;
+          };
+        }
+
+        if (this.status === PENDING) {
+          let p = new Promise(function(resolve, reject) {
+            that.resolveCallbacks.push(function() {
+              setTimeout(function() {
+                try {
+                  if (typeof onFulfilled !== "function") {
+                    resolve(that.value);
+                  } else {
+                    let result = onRealFulfilled(that.value);
+                    resolvePromise(p, result, resolve, reject);
+                  }
+                } catch (error) {
+                  reject(error);
+                }
+              }, 0);
+            });
+
+            that.rejectCallbacks.push(function() {
+              setTimeout(function() {
+                try {
+                  if (typeof onRejected !== "function") {
+                    reject(that.reason);
+                  } else {
+                    let result = onRealRejected(that.reason);
+                    resolvePromise(p, result, resolve, reject);
+                  }
+                } catch (error) {
+                  reject(error);
+                }
+              }, 0);
+            });
+          });
+          return p;
+        }
+
+        if (this.status === FULFILLED) {
+          let p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+              try {
+                if (typeof onFulfilled !== "function") {
+                  resolve(that.value);
+                } else {
+                  let result = onRealFulfilled(that.value);
+                  resolvePromise(p, result, resolve, reject);
+                }
+              } catch (error) {
+                reject(error);
+              }
+            }, 0);
+          });
+          return p;
+        }
+
+        if (this.status === REJECTED) {
+          let p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+              try {
+                if (typeof onRejected !== "function") {
+                  reject(that.reason);
+                } else {
+                  let result = onRealRejected(that.reason);
+                  resolvePromise(p, result, resolve, reject);
+                }
+              } catch (error) {
+                reject(error);
+              }
+            }, 0);
+          });
+          return p;
+        }
+      };
+
+      function resolvePromise(p, preResult, resolve, reject) {
+        if (p === preResult) {
+          return reject("The promise and the return value are the same");
+        }
+
+        if (preResult instanceof Promise) {
+          try {
+            preResult.then(res => {
+              resolvePromise(p, res, resolve, reject);
+            }, reject);
+          } catch (error) {
+            reject(error);
+          }
+        } else if (
+          (typeof preResult === "object" && preResult !== null) ||
+          typeof preResult === "function"
+        ) {
+          let then = preResult.then;
+          if (typeof then === "function") {
+            try {
+              preResult.then(res => {
+                resolvePromise(p, res, resolve, reject);
+              }, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }
+        } else {
+          resolve(preResult);
+        }
+      }
+
+      Promise.resolve = function(a) {
+        if (a instanceof Promise) {
+          return a;
+        }
+        return new Promise(function(resolve, reject) {
+          resolve(a);
+        });
+      };
+
+      Promise.reject = function(a) {
+        return new Promise(function(resolve, reject) {
+          reject(a);
+        });
+      };
+
+      Promise.prototype.catch = function(onRejected) {
+        return this.then(null, onRejected);
+      };
+
+      Promise.prototype.finnally = function(fn) {
+        return this.then(
+          function(value) {
+            return Promise.resolve(fn()).then(function() {
+              return value;
+            });
+          },
+          function(reason) {
+            return Promise.resolve(fn()).then(function() {
+              throw reason;
+            });
+          }
+        );
+      };
+
+      Promise.race = function(promiselist = []) {
+        let len = promiselist.length;
+        let value = null;
+        let reason = null;
+        return new Promise(function(resolve, reject) {
+          for (let i = 0; i < len; i++) {
+            Promise.resolve(promiselist[i]).then(
+              function(value) {
+                return resolve(value);
+              },
+              function(reason) {
+                return reject(reason);
+              }
+            );
+          }
+        });
+      };
+
+      Promise.all = function(promiselist = []) {
+        let len = promiselist.length;
+        let count = 0;
+        let resultArr = new Array(len);
+        let reason = null;
+        return new Promise(function(resolve, reject) {
+          for (let i = 0; i < len; i++) {
+            Promise.resolve(promiselist[i]).then(
+              function(value) {
+                count++;
+                resultArr[i] = value;
+                if (count === len) {
+                  resolve(resultArr);
+                }
+              },
+              function(reason) {
+                return reject(reason);
+              }
+            );
+          }
+        });
+      };
+
+      Promise.allSettled = function(promiselist = []) {
+        let len = promiselist.length;
+        let count = 0;
+        let results = new Array(len);
+        return new Promise(function(resolve, reject) {
+          for (let i = 0; i < len; i++) {
+            Promise.resolve(promiselist[i]).then(
+              function(value) {
+                count++;
+                results[i] = {
+                  status: FULFILLED,
+                  value: value
+                };
+                if (count === len) {
+                  resolve(results);
+                }
+              },
+              function(reason) {
+                count++;
+                results[i] = {
+                  status: REJECTED,
+                  reason: reason
+                };
+                if (count === len) {
+                  resolve(results);
+                }
+              }
+            );
+          }
+        });
+      };
+
+      Promise.any = function(promiselist = []) {
+        let len = promiselist.length;
+        let value = null;
+        let reasons = [];
+        let rejectedCount = 0;
+        return new Promise(function(resolve, reject) {
+          for (let i = 0; i < len; i++) {
+            Promise.resolve(promiselist[i]).then(
+              function(value) {
+                return resolve(value);
+              },
+              function(reason) {
+                rejectedCount++;
+                reasons[i] = reason;
+                if (rejectedCount === len) {
+                  reject(reasons);
+                }
+              }
+            );
+          }
+        });
+      };
+      // 测试 then ----------------------------------------
+      // var p2 = new Promise((resolve, reject) => {
+      //   let value = Math.random() * 10;
+      //   setTimeout(() => {
+      //     if (value >= 5) {
+      //       resolve(value);
+      //     } else {
+      //       reject(value);
+      //     }
+      //     console.log('setTimeout end')
+      //   }, 1000);
+      // });
+
+      // p2.then(
+      //   res => {
+      //     console.log("p2 then 1", res);
+      //     return "then";
+      //   },
+      //   error => {
+      //     console.log("p2 error 1", error);
+      //     return "error";
+      //   }
+      // ).then(
+      //   res => {
+      //     console.log("p2 then 2", res);
+      //     return "then";
+      //   },
+      //   error => {
+      //     console.log("p2 error 2", error);
+      //     return "error";
+      //   }
+      // ).then(
+      //   res => {
+      //     console.log("p2 then 3", res);
+      //     return "then";
+      //   },
+      //   error => {
+      //     console.log("p2 error 3", error);
+      //     return "error";
+      //   }
+      // )
+
+      // 测试 catch finnally ----------------------------------------
+      // let p3 = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(5);
+      //   });
+      // });
+
+      // p3.then(res => {
+      //   return new Promise((resolve, reject) => {
+      //     setTimeout(() => {
+      //       reject(10);
+      //     }, 100);
+      //   });
+      // })
+      //   .then(res => {
+      //     console.log("then then", res);
+      //   })
+      //   .catch(error => {
+      //     console.log("catch error", error);
+      //   })
+      //   .finnally(() => {
+      //     console.log("finnally finnally");
+      //     return "finally";
+      //   })
+      //   .then(res => {
+      //     console.log("finnally then", res);
+      //   });
+
+      // 测试 all ----------------------------------------
+      let ps1 = [
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(11111);
+          }, 3000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(22222);
+          }, 2000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(33333);
+          }, 1000);
+        })
+      ];
+
+      let ps2 = [
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(11111);
+          }, 3000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(22222);
+          }, 2000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(33333);
+          }, 1000);
+        })
+      ];
+
+      let ps3 = [
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(11111);
+          }, 3000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(22222);
+          }, 2000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(33333);
+          }, 1000);
+        })
+      ];
+
+      let ps4 = [
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(11111);
+          }, 3000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(22222);
+          }, 2000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(33333);
+          }, 1000);
+        })
+      ];
+
+      let ps5 = [
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(11111);
+          }, 3000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject(22222);
+          }, 2000);
+        }),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(33333);
+          }, 1000);
+        })
+      ];
+
+      // Promise.all(ps1).then(
+      //   res => {
+      //     console.log("ps1 Promise.all resolve", res);
+      //   },
+      //   error => {
+      //     console.log("ps1 Promise.all reject", error);
+      //   }
+      // );
+
+      // Promise.all(ps2).then(
+      //   res => {
+      //     console.log("ps2 Promise.all resolve", res);
+      //   },
+      //   error => {
+      //     console.log("ps2 Promise.all reject", error);
+      //   }
+      // );
+
+      // 测试 race ----------------------------------------
+      // Promise.race(ps3).then(
+      //   res => {
+      //     console.log("ps3 Promise.race resolve", res);
+      //   },
+      //   error => {
+      //     console.log("ps3 Promise.race reject", error);
+      //   }
+      // )
+
+      // Promise.race(ps4).then(
+      //   res => {
+      //     console.log("ps4 Promise.race resolve", res);
+      //   }
+      // ).catch(
+      //   error => {
+      //     console.log("ps4 Promise.race catch", error);
+      //   }
+      // )
+
+      // 测试 race ----------------------------------------
+      // Promise.race(ps3).then(
+      //   res => {
+      //     console.log("ps3 Promise.race resolve", res);
+      //   },
+      //   error => {
+      //     console.log("ps3 Promise.race reject", error);
+      //   }
+      // )
+
+      // Promise.race(ps4).then(
+      //   res => {
+      //     console.log("ps4 Promise.race resolve", res);
+      //   }
+      // ).catch(
+      //   error => {
+      //     console.log("ps4 Promise.race catch", error);
+      //   }
+      // )
+
+      // 测试 allSettled ----------------------------------------
+      Promise.allSettled(ps5).then(res => {
+        console.log("ps5 Promise.allSettled resolve", res);
+      });
+
+      // 测试 any ----------------------------------------
+      var resolved = Promise.resolve(42);
+      var rejected = Promise.reject(-1);
+      var alsoRejected = Promise.reject(Infinity);
+
+      Promise.any([resolved, rejected, alsoRejected]).then(function(result) {
+        console.log(result); // 42
+      });
+
+      Promise.any([rejected, alsoRejected]).catch(function(results) {
+        console.log(results); // [-1, Infinity]
+      });
+    </script>
+  </body>
+</html>

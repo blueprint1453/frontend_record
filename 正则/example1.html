@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var r1 = new RegExp('abc', 'gi');
+      var r2 =  new RegExp(/abc/m, 'gi');
+      console.log(r1, r1.lastIndex, r1.source, r1.flags)
+      console.log(r2, r2.lastIndex, r2.source, r2.flags)
+
+
+      var str1 = 'regex'
+      console.log(str1.match('g'))
+      console.log(str1.match(/^r/))
+      console.log(str1.match(/x$/))
+
+      console.log('@abc2018'.match(/@([a-z]+)([A-Z]+)?/)) // ["@abc", "abc", undefined, index: 0, input: "@abc2018", groups: undefined]
+      console.log('@abc-xyz-$abc'.replace(/([^-]+)abc/g, '$1biu')) // "@biu-xyz-$biu"
+      console.log('@abc-xyz-$abc'.replace(/([^-]+)abc/g, '{$&}')) // "{@abc}-xyz-{$abc}"
+      console.log('@abc-xyz-$abc'.replace(/([^-]+)abc/g, '{$`}'))  // "{}-xyz-{@abc-xyz-}"
+      console.log('@abc-xyz-$abc'.replace(/([^-]+)abc/g, "{$'}"))  // "{-xyz-$abc}-xyz-{}"
+      console.log('abc-xyz-abc'.search(/abc/g))
+      console.log('abc-xyz-abc'.replace(/abc/g, (match) => `{${match}}`))
+
+      '@abc3-xyz-$abc5'.replace(/([^-]+)abc(\d+)/g, function(match, $1, $2){
+        console.log(arguments)
+        console.log(match, $1, $2)
+        return `{${$1}${match}${$2}}`
+      });
+
+      console.log('<p>hello regex</p>'.replace(/<(\/?[a-zA-Z])+>/g,(match, $1) => `&gt;${$1}&lt;`))
+      console.log('<p>hello regex</p>'.replace(/<(\/?[a-zA-Z])+>/g,'&gt;$1&lt;'))
+      // "{@@abc33}-xyz-{$$abc55}"
+      var num = '1234567890'
+      // var reg = /(?<!\b)(\d{3})+(?!\b)/g
+      '1234567890'.replace(/\B(?=(?:\d{3})+\b)/g, ',')
+      // console.log(num.replace(reg, ',$1'))
+      '1234567890123456'.replace(/\B(?=(\d{3})+\b)/g, ',')
+
+      // 匹配十六进制颜色 #ffccdd #fcd 
+      var colorReg = /#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})/
+
+      // 匹配时间 12:30:30
+      var timeReg = /([01][0-9]|[2][0-3]):([0-5][0-9])(:[0-5][0-9])?/
+
+      // 匹配日期 2019-04-16
+      var dateReg = /\d{4}-(0[1-9]|1[0-2])-((0[1-9])|([12][0-9])|(3[01]))/
+
+      // window操作系统文件路径
+      var filePathReg = /^[a-zA-Z]:\\([^\\*:<>|"?'\r\n/]+\\)*([^\\*:<>|"?'\r\n/]+)$/
+      
+    </script>
+  </body>
+</html>

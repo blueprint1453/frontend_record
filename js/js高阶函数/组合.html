@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let n = "3.56";
+      let data = parseFloat(n);
+      let result = Math.round(data);
+      // Math.round(parseFloat(n))
+      // 方法1 实现一个同步任务的函数组合
+      const compose = (...fns) => {
+        let result;
+        return function next(arg) {
+          if (fns.length === 0) return result;
+          const fn = fns.pop();
+          if (fn) {
+            result = fn.apply(null, arg);
+            return next(result);
+          }
+        };
+      };
+      // 方法2 实现一个同步任务的函数组合
+      const compose2 = (...fns) => {
+        return (x) => fns.reduceRight((arg, fn) => fn(arg),x)
+      }
+
+      const result1 = compose2(Math.round, parseFloat)("3.56");
+      console.log(result1);
+
+      let str = "jspool";
+
+      function stringToUpper(str) {
+        return str.toUpperCase();
+      }
+
+      function stringReverse(str) {
+        return str
+          .split("")
+          .reverse()
+          .join("");
+      }
+      let result2 = compose2(stringReverse, stringToUpper)(str);
+      console.log(result2);
+    </script>
+  </body>
+</html>

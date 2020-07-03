@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+    .box1, .box2 {
+      width: 200px;
+      margin: 0 auto;
+      background: lightblue;
+      margin-bottom: 20px;
+      border-radius: 2px;
+      padding: 10px;
+    }
+    .box1 p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .box2 p {
+      position: relative;
+      line-height: 1.5em;
+      height: 4.5em;
+      overflow: hidden;
+      word-wrap: break-word;
+      word-spacing: 4px;
+      /* text-overflow: ellipsis;
+      white-space: nowrap; */
+    }
+
+    .box3 {
+      width: 200px;
+      margin: 20px auto;
+      background: lightblue;
+      /* height: 20px;
+      line-height: 20px; */
+    }
+    .box3 .ellipsis {
+      height: 20px;
+      line-height: 20px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="box1">
+      <p>
+        下同步文件到docker后，不会触发node的fsevent相关事件，基于这类事件的程序如(webpack开启watch选项）将会失效。之前搜过一些issue，好像是有第三方的程序包可以解决这个问题。
+      </p>
+    </div>
+    <div class="box2">
+      <p>
+        下同步文件到docker后，不会触发node的fsevent相关事件，基于这类事件的程序如(webpack开启watch选项）将会失效。之前搜过一些issue，好像是有第三方的程序包可以解决这个问题
+        因为最近一直在写服务端相关的东西，没用到webpack watch，所以还没折腾
+      </p>
+    </div>
+    <div class="box3">
+      <p class="ellipsis"></p>
+    </div>
+    <script>
+      var s = '这是一个文本这是一个文本这是一个文本这是一个文本这是一个文本这是一个文本'
+      var box3 = document.querySelector('.box3')
+      var ellipsisEle = box3.querySelector('.ellipsis')
+      var h = ellipsisEle.offsetHeight
+      let len = s.length
+      for (var i = 0; i < len; i++) {
+        ellipsisEle.innerHTML = s.substr(0, i);
+        if (ellipsisEle.scrollHeight > h) {
+          ellipsisEle.style.overflow = 'hidden'
+          ellipsisEle.innerHTML = s.substr(0, i - 2) + ' ...'
+          break
+        }
+      }
+    </script>
+  </body>
+</html>

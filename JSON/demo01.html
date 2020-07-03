@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var obj1 = {
+        name: "jack",
+        age: 18,
+        score: "98",
+        car: null,
+        wife: undefined,
+        hasWife: false,
+        birthday: new Date(),
+        other: Symbol("jack"),
+        reg: /[a-z]+/,
+        action: function() {},
+        num1: Infinity,
+        num2: NaN
+      };
+
+      var obj2 = [
+        "jack",
+        18,
+        null,
+        undefined,
+        false,
+        new Date(),
+        Symbol("jack"),
+        /[a-z]+/,
+        function() {},
+        Infinity,
+        NaN
+      ];
+
+      console.log(typeof JSON.stringify(obj1));
+      console.log(typeof JSON.stringify(obj2));
+
+      console.log(JSON.stringify(obj1));
+      console.log(JSON.stringify(obj2));
+
+      console.log(JSON.parse(JSON.stringify(obj1)));
+
+      var obj3 = {
+        name: "jack",
+        age: 18,
+        score: "98",
+        car: null,
+        hasWife: false
+        //  reg: /[a-z]+/,
+        //  action: function() {},
+        //  num2: NaN
+      };
+
+      var obj3after = JSON.stringify(obj3, function(key, value) {
+        if (key === "age") return value + 10;
+        else return value;
+      });
+      console.log(obj3after);
+      obj3after = JSON.stringify(obj3, ["name", "age"]);
+      console.log(obj3after);
+
+      var friend = {
+        firstName: "Good",
+        lastName: "Man",
+        phone: "1234567",
+        age: 18
+      };
+
+      var friendAfter = JSON.stringify(friend, function(key, value) {
+        if (key === "phone") return "(000)" + value;
+        else if (typeof value === "number") return value + 10;
+        else return value; //如果你把这个else分句删除，那么结果会是undefined
+      });
+      console.log(friendAfter);
+
+
+      // 2. 将JSON字符串解析为JS数据结构——JSON.parse 
+      console.log('------------------------------')
+      var friendJson = JSON.stringify(friend)
+      var friendParse = JSON.parse(friendJson, function(key, value) {
+        console.log(key, value)
+        return value
+      })
+      console.log(friendParse)
+      console.log('------------------------------')
+      
+
+      // 3. 影响 JSON.stringify 的神奇函数——object.toJSON 
+      var info = {
+        msg: "I Love You",
+
+        toJSON: function() {
+          var replaceMsg = new Object();
+
+          replaceMsg["msg"] = "Go Die";
+
+          return replaceMsg;
+        }
+      };
+
+      console.log(JSON.stringify(info));
+    </script>
+  </body>
+</html>

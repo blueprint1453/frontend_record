@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function getData(i) {
+        return new Promise((resolve, reject) => {
+          resolve(i);
+        });
+      }
+      function* g1() {
+        for (let i = 0; i < 3; i++) {
+          yield getData(i);
+        }
+      }
+
+      function run() {
+        let g = g1();
+        function next(data) {
+          var result = g.next(data);
+          if (g.done) return result.value;
+          result.value.then(data => {
+            console.log(data);
+            next(data);
+          });
+        }
+        next();
+      }
+      // run();
+      // var g = g1();
+      // console.log(g);
+      // console.log(g.next());
+      // console.log(g.next(100));
+      // console.log(g.next());
+      // console.log(g.next());
+
+      var clock = function*() {
+        while (true) {
+          console.log("Tick!");
+          yield;
+          console.log("Tock!");
+          yield;
+        }
+      };
+      var c = clock();
+      c.next();
+      c.next();
+      c.next();
+      function* helloWorldGenerator() {
+        console.log("helloWorldGenerator");
+        let a = yield "hello";
+        console.log(a);
+        let b = yield "world";
+        console.log(b);
+        return "ending";
+      }
+
+      var hw = helloWorldGenerator();
+      console.log(hw.next(789));
+      console.log(hw.next(456));
+      console.log(hw.next(123));
+
+      function wrapFn(generatorFn) {
+        return function(...args) {
+          let generatorObj = generatorFn(...args);
+          generatorObj.next();
+          return generatorObj;
+        };
+      }
+      function* gen() {
+        console.log("input: " + (yield));
+      }
+      var wrapped = wrapFn(gen);
+      wrapped().next("first");
+
+      function trunk(fn) {
+        return function() {
+          var args = [...arguments];
+          fn.apply(null, args);
+          return function() {};
+        };
+      }
+    </script>
+  </body>
+</html>

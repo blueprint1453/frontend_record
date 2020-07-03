@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1.递归调用后的返回值问题----------------------------------------------------------------------
+      // 递归调用的函数的最后返回值问题
+      var i = 0;
+      function fun() {
+        i++;
+        if (i < 5) {
+          fun();
+        } else {
+          return i;
+        }
+      }
+      // 打印结果 undefined 5
+      // 递归调用，递归几次就会形成多少次调用栈 最后一次调用栈执行的代码是return i，也就是返回了5
+      // 递归执行完后，会依次退出执行栈，if条件的fun()是直接调用（没有使用return），所以最后返回的undefined
+      console.log(fun(), i);
+
+      var j = 0;
+      function fun2() {
+        j++;
+        if (j < 5) {
+          return fun2();
+        } else {
+          return j;
+        }
+      }
+      // 打印结果 5 5
+      // 有return语句，保证递归调用后最后退出的后能返回5
+      console.log(fun2(), j);
+
+      // 2.-------------------------------------------------------------------
+
+      function LateBloomer() {
+        this.petalCount = Math.ceil(Math.random() * 2 + 1);
+      }
+      LateBloomer.prototype.bloom = function() {
+        // window.setTimeout(this.declare, 1000);
+        // window.setTimeout(() => this.declare(), 1000);
+
+        var context = this;
+        window.setTimeout(this.declare.bind(context), 1000);
+      };
+      LateBloomer.prototype.declare = function() {
+        console.log(
+          "I am a beautiful flower with " + this.petalCount + " petals"
+        );
+      };
+      var flower = new LateBloomer();
+      flower.bloom();
+
+      // 3.-------------------------------------------------------------------
+      var num = 1;
+      function codequn() {
+        "use strict";
+        console.log("codequn: ", this.num++);
+      }
+      function codequn2() {
+        console.log(this); 
+        console.log("codequn2: ", ++this.num);
+      }
+      (function() {
+        "use strict";
+        codequn2();
+      })();
+      codequn();
+      // codequn2: 2
+      // Cannot read property 'num' of undefined
+
+
+    </script>
+  </body>
+</html>

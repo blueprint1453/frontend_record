@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="mount-point"></div>
+    <script>
+      // 创建构造器
+      var Profile = Vue.extend({
+        template: "<p>{{firstName}} {{lastName}} aka {{alias}}</p>",
+        data: function() {
+          return {
+            firstName: "Walter",
+            lastName: "White",
+            alias: "Heisenberg"
+          };
+        }
+      });
+      // 创建 Profile 实例，并挂载到一个元素上。
+      new Profile().$mount("#mount-point");
+
+      // 写一个loading组件
+      const Loadingcomponent = Vue.extend({
+        template: "<div id='loading'>{{msg}}</div>",
+        data() {
+          return {
+            time: 3000
+          }
+        },
+        props: {
+          msg: {
+            type: String,
+            default: "loading..."
+          }
+        }
+      });
+      function loading(msg) {
+        let div = document.createElement("div");
+        div.setAttribute("id", "loading-wrapper");
+        document.body.appendChild(div); // 创建一个dom元素，将其添加到body中，后面loading渲染后将其替换。
+        const instance = new Loadingcomponent({
+          //  这里传入的对象会替换掉模板里面相同的内容（props ,  msg ）
+          props: {
+            msg: '加载',
+            // msg: {
+            //   type: String,
+            //   default: msg //  将默认值改变成传入的 msg
+            // }
+          },
+          // propsData: {
+          //   msg: '记载'
+          // }
+        })
+        console.log('$el', instance.$el)
+        instance.$mount(); //  渲染loading ， 并将 loading-temp 替换成 loading
+        console.log('$el', instance.$el, instance.$el.nodeType, instance.$el.parentNode)
+        document.body.appendChild(instance.$el)
+        return () => {
+          //  这里会返回一个函数，过场动画完成之后就可以清除loading
+          document.body.removeChild(document.querySelector("#loading"));
+        };
+      }
+      var hide = loading('加载')
+      setTimeout(hide, 10000)
+      
+      
+    </script>
+  </body>
+</html>

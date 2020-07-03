@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      /* 利用元素的margin/padding百分比是相对父元素width的性质来实现 */
+      .square1 {
+        width: 20%;
+        padding-top: 20%;
+        background: lightblue;
+        margin-bottom: 20px;
+      }
+      
+      /* 利用子元素的margin-top的值来实现的 */
+      .square2 {
+        width: 20%;
+        background: lightblue;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .square2::after {
+        content: '';
+        margin-top: 100%;
+        display: block;
+      }
+      /* 利用vw来实现 */
+      .square3 {
+        width: 20%;
+        height: 20vw;
+        background: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="square1"></div>
+    <div class="square2"></div>
+    <div class="square3"></div>
+  </body>
+</html>

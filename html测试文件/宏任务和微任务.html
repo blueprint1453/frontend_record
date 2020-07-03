@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      document.body.style = "background:blue";
+      console.log(1);
+      Promise.resolve().then(() => {
+        console.log(2);
+        new Promise((resolve) => {
+          resolve(2)
+          document.body.style = "background:black";
+          console.log(document.body.style)
+        })
+      }).then(value => {
+        console.log('then', value)
+      })
+      console.log(3);
+    </script>
+  </body>
+</html>

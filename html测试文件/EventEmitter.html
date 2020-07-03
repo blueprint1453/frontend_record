@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class EventEmiter{
+      constructor() {
+        this.listenerMap = {}
+        this.onces = []
+      }
+      on(name, handler) {
+        if (typeof handler !== 'function') {
+          throw new Error('handler should a function')
+        }
+        if (this.onces.find(item => item === name)) {
+          return this.listenerMap[name] = [handler]
+        }
+        if (this.listenerMap.hasOwnProperty(name)) {
+          this.listenerMap[name].push(handler)
+        } else {
+          this.listenerMap[name] = [handler]
+        }
+      }
+      once(name, handler) {
+        if (!this.onces.find(item => item === name)) {
+          return this.onces.push(name)
+        }
+        this.on(name, handler)
+      }
+      emit(name, ...params) {
+        let handlers = this.getListeners(name)
+        for (let handler of handlers) {
+          handler.call(this, ...params)
+        }
+        if (this.onces.find(item => item === name)) {
+          this.off(name)
+        }
+      }
+      off(name) {
+        this.listenerMap[name] = null
+        delete this.listenerMap[name]
+      }
+      getEventNames() {
+        return [...Object.keys(this.listenerMap), ...this.onces]
+      }
+      getListeners(name) {
+        return this.listenerMap[name] || []
+      }
+    }
+    
+    var event = new EventEmiter()
+    event.on('a', function() {
+      console.log('a event')
+    })
+    event.on('a', function() {
+      console.log(this)
+    })
+    event.on('a', function() {
+      console.log(arguments)
+    })
+    console.log(event.getEventNames())
+    console.log(event.getListeners('a'))
+    event.emit('a', 'aaaaaaa')
+    console.log('------------------------------------')
+    event.once('b', function() {
+      console.log('b event 1')
+    })
+    event.once('b', function() {
+      console.log('b event 2')
+    })
+    event.emit('b', 'bbbbbb')
+    event.emit('b', 'bbbbbb')
+
+  </script>
+</body>
+</html>

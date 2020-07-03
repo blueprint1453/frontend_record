@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .box {
+        width: 800px;
+        background: #88a3ee;
+      }
+      .box span {
+        display: block;
+        width: auto;
+        font-size: 20px;
+        background: #6ddceb;
+        margin: 40px;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- width:100%会使元素box的宽度等于父元素的contentbox的宽度。
+      width:auto会使元素撑满整个父元素，margin、border、padding、content区域会自动分配水平空间。
+     -->
+    <div class="box">
+      <span>
+        width:auto1
+      </span>
+      <!-- <span>
+        width:auto1
+      </span> -->
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>
+  setTimeout(() => {
+    console.log('setTimeout')
+  }, 5000);
+  </script>
+  <style>
+  body {
+    background: lightblue;
+  }
+  </style>
+</head>
+<body>
+  <div>
+    sssss
+  </div>
+  <script>
+    // parseInt(string, radix) radix值介于 2 ~ 36 之间 小于 2 或者大于 36，则 ‘parseInt()‘ 将返回 ‘NaN‘
+    let result = ['1', '2', '3'].map(parseInt)
+    console.log(result) // [1, NaN, NaN]
+  </script>
+</body>
+</html>

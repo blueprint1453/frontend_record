@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function run(generatorFn, ...params) {
+      let iterator = generatorFn()
+      function next(data) {
+        let p = iterator.next(data)
+        if (p.done) return p.value
+        p.value.then(res=> {
+          console.log(res)
+          next(res)
+        })
+      }
+      next()
+    }
+
+    function* gen(a = 1) {
+      let one = yield Promise.resolve(1)
+      let two = yield Promise.resolve(2*one)
+      let three = yield Promise.resolve(3*two)
+      let four = yield Promise.resolve(4*three)
+    }
+
+    run(gen)
+  </script>
+</body>
+</html>
