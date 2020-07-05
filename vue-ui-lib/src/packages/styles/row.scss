@@ -1,0 +1,17 @@
+
+.row {
+  display: flex;
+}
+
+@each $justify in center, end, space-between, space-around {
+  .is-justify-#{$justify} {
+    justify-content: #{$justify};
+    // justify-content: $justify;
+  }
+}
+
+@each $align in center, bottom {
+  .is-align-#{$align} {
+    align-items: $align;
+  }
+}

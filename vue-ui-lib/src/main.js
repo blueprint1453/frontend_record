@@ -9,6 +9,8 @@ import './style/reset.css'
 import './style/common.scss'
 import './style/index.scss'
 
+import './packages/styles/index.scss'
+
 Vue.config.productionTip = false
 Vue.use(Loading)
 

@@ -1,4 +1,3 @@
-
 export default {
   name: 'Row',
   props: {
@@ -35,7 +34,7 @@ export default {
       class: [
         'row',
         this.justify !== 'start' ? `is-justify-${this.justify}` : '',
-        this.align !== top ? `is-align-${this.align}`: ''
+        this.align !== top ? `is-align-${this.align}` : ''
       ],
       style: this.style
     }, this.$slot.default)
