@@ -1,5 +1,6 @@
 export default {
   name: 'Row',
+  componentName: 'Row',
   props: {
     tag: {
       type: String,
@@ -37,6 +38,6 @@ export default {
         this.align !== top ? `is-align-${this.align}` : ''
       ],
       style: this.style
-    }, this.$slot.default)
+    }, this.$slots.default)
   },
 }

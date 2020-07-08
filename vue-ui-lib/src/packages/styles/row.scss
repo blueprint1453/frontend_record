@@ -1,6 +1,7 @@
 
 .row {
   display: flex;
+  flex-wrap: wrap;
 }
 
 @each $justify in center, end, space-between, space-around {
@@ -10,8 +11,15 @@
   }
 }
 
-@each $align in center, bottom {
-  .is-align-#{$align} {
-    align-items: $align;
+@each $align in middle, bottom {
+  @if $align == middle {
+    .is-align-#{$align} {
+      align-items: center;
+    }
+  }
+  @if $align == bottom {
+    .is-align-#{$align} {
+      align-items: flex-end;
+    }
   }
 }

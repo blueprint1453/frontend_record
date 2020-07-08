@@ -1,10 +1,4 @@
 
-@for $i from 1 through 24 {
-  .col-span-#{$i} {
-    width: $i / 24 * 100 * 1%;
-  } 
-}
-
 @each $prop in span, offset, pull, push {
   @for $i from 1 through 24 {
     @if $prop == span {
@@ -34,21 +28,22 @@ $size-lg: 1200px;
 $size-md: 992px;
 $size-sm: 768px;
 
-@each $size in xl, lg, md, sm, xs {
-  @if $size == xs {
-    @media only screen and (max-width: $size-sm) {
-      @for $i from 1 to 24 {
-        width: $i / 24 * 100 * 1%;
-      }  
-    }
+@each $sizeProp,$size in (xs, $size-sm), (sm, $size-sm), (md, $size-md), (lg, $size_lg), (xl, $size_xl) {
+  @if $sizeProp == xs {
+    @for $i from 1 through 24 {
+      @media only screen and (max-width: $size) {
+        .col-#{$sizeProp}-#{$i} {
+          width: $i / 24 * 100 * 1%;
+        }
+      }
+    }  
   } @else {
-    @media only screen and (min-width: $size) {
-      @for $i from 1 to 24 {
-        width: $i / 24 * 100 * 1%;
-      }  
-    }
+    @for $i from 1 through 24 {
+      @media only screen and (min-width: $size) {
+        .col-#{$sizeProp}-#{$i} {
+          width: $i / 24 * 100 * 1%;
+        }
+      }
+    }  
   }
 }
-
-
-

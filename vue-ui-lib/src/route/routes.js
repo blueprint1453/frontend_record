@@ -1,10 +1,9 @@
 
-
 const Home = () => import('../views/home/index.vue')
 const About = () => import('../views/about/index.vue')
 const List = () => import('../views/list/index.vue')
 const File = () => import('../components/Upload.vue')
-
+const Layout = () => import('../views/Layout/index.vue')
 const routes = [
   {
     component: Home,
@@ -21,6 +20,10 @@ const routes = [
   {
     component: File,
     path: '/file'
+  },
+  {
+    component: Layout,
+    path: '/layout'
   },
 ]
 

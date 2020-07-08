@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <div class="nav">
+    <!-- <div class="nav">
       <router-link to="/">Home</router-link>
       <router-link to="/list">List</router-link>
       <router-link to="/about">About</router-link>
       <router-link to="/file">File upload</router-link>
     </div>
-    <!-- <Carousel el-loading-text="呵呵"></Carousel> -->
     <div 
       class="loading-container"
       v-loading.fullscreen.lock="loading"
@@ -14,13 +13,10 @@
       loading-background="rgba(0,0,0,.3)"
      >
      <div style="height:400px; font-size:48px">loading container content</div>
-      <!-- <div class="loading-container-inner">
-        <div style="height:400px; font-size:48px">loading container content</div>
-      </div> -->
     </div>
     <div style="height:400px;padding-top:160px;text-align:center">
        <button @click="showLoading">loading</button>
-    </div>
+    </div> -->
     <router-view></router-view>
   </div>
 </template>

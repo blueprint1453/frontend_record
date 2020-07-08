@@ -1,0 +1,48 @@
+
+.message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 20px;
+  background: #fff;
+  font-size: 14px;
+
+  .icon-close {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+    color: #bbb;
+    font-size: 14px;
+  }
+}
+
+.message-info {
+  background: #e2ebf8;
+  color: #555;
+}
+
+.message-warn {
+  background: #fcdeb2;
+  color: #f3a246;
+}
+
+.message-success {
+  background: #c4f8bd;
+  color: #37a029;
+}
+
+.message-error {
+  background: #fcd2d1;
+  color: #f56946;
+}
+
+.is-align-center {
+  text-align: center;
+}
+
+.message-content {
+  padding-right: 20px;
+}
+

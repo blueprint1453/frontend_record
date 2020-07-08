@@ -10,7 +10,7 @@ module.exports = {
   // assetsDir: 'static',
   productionSourceMap: true,
   devServer: {
-    host: 'localhost',
+    host: '10.8.40.52',
     hot: true,
     open: true,
     proxy: {

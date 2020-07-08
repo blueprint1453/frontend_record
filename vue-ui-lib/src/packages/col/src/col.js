@@ -31,7 +31,7 @@ export default {
   computed: {
     gutter() {
       let parent = this.$parent
-      while (parent && parent.name !== 'Row') {
+      while (parent && parent.$options.componentName !== 'Row') {
         parent = parent.$parent
       }
       return parent.gutter || 0
@@ -67,6 +67,6 @@ export default {
     return h(this.tag, {
       class: ['col', classlist],
       style,
-    }, this.$slot.default)
+    }, this.$slots.default)
   },
 }
