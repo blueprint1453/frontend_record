@@ -67,6 +67,7 @@ Message.close = function(id, closeFn) {
 }
 
 Message.closeAll = function() {
+  console.log('closeAll', instances)
   if (instances.length > 0) {
     instances.forEach(vm => {
       vm.close()

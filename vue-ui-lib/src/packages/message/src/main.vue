@@ -1,18 +1,23 @@
 <template>
-  <div
-    v-show="visible"
-    class="message"
-    :class="[
-      'message-' + type,
-      center ? 'is-align-center': ''
-    ]"
-    :style="messageStyle" 
-  >
-    <slot>
-      <p class="message-content">{{message}}</p>
-    </slot>
-    <span class="icon-close" v-if="showClose" @click="close" >x</span>
-  </div>
+  <transition name="message-fade" @after-leave="handleAfterLeave" >
+    <div
+      v-show="visible"
+      class="message"
+      :class="[
+        'message-' + type,
+        center ? 'is-align-center': '',
+        showClose ? 'has-close' : ''
+      ]"
+      :style="messageStyle"
+      @mouseenter="clearTimer"
+      @mouseleave="startTimer"
+    >
+      <slot>
+        <p class="message-content">{{message}}</p>
+      </slot>
+      <span class="icon-close" v-if="showClose" @click="close" >x</span>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -45,6 +50,7 @@ export default {
   },
   methods: {
     startTimer() {
+      this.clearTimer()
       this.timer = setTimeout(() => {
         this.visible && this.close()
       }, this.duration)
@@ -62,7 +68,14 @@ export default {
       if (this.visible && e.keyCode===27) {
         this.close()
       }
+    },
+    handleAfterLeave() {
+      this.$destroy()
+      this.$el.parentNode.removeChild(this.$el);
     }
-  }
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.onKeydown)
+  },
 }
 </script>

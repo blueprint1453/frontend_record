@@ -7,6 +7,9 @@
       <span @click="openErrorMessage">错误</span>
       <span @click="openTextCenterMessage">文字居中</span>
     </div>
+    <div class="btns">
+      <span @click="goHome">返回</span>
+    </div>
   </div>
 </template>
 <script>
@@ -20,34 +23,40 @@ export default {
     },
     openWarnMessage() {
       this.$message({
-        message: '这是一段普通信息， 这是一段普通信息',
+        message: '这是一段警告信息， 这是一段警告信息',
         duration: 3000,
         type: 'warn'
       });
     },
     openSuccessMessage() {
       this.$message({
-        message: '这是一段普通信息， 这是一段普通信息',
+        message: '这是一段成功信息， 这是一段成功信息',
         duration: 3000,
         type: 'success'
       });
     },
     openErrorMessage() {
       this.$message({
-        message: '这是一段普通信息， 这是一段普通信息',
+        message: '这是一段错误信息， 这是一段错误信息',
         duration: 3000,
         type: 'error'
       });
     },
     openTextCenterMessage() {
       this.$message({
-        message: '这是一段普通信息， 这是一段普通信息',
-        duration: 10000,
+        message: '这是一段文本居中普通信息， 这是一段文本居中普通信息',
+        duration: 3000,
         type: 'info',
         center: true,
         showClose: true
       });
+    },
+    goHome() {
+      this.$router.push('/')
     }
+  },
+  beforeDestroy() {
+    this.$message.closeAll()
   }
 }
 </script>
@@ -57,6 +66,7 @@ export default {
   }
   .btns {
     display: flex;
+    margin-bottom: 20px;
     > span {
       padding: 6px 14px;
       font-size: 14px;

@@ -1,14 +1,31 @@
 
+.message-fade-enter, .message-fade-leave-to {
+  margin-top: -16px;
+  opacity: 0;
+}
+
+.message-fade-enter-to, .message-fade-leave {
+  margin-top: 0;
+  opacity: 0.7;
+}
+
 .message {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 20px;
+  padding: 8px 20px;
+  min-width: 320px;
   background: #fff;
   font-size: 14px;
   border-radius: 2px;
-  transition: all 0.4;
+  transition: all 0.5s;
+
+  &.has-close {
+    .message-content {
+      padding-right: 20px;
+    }
+  }
 
   .icon-close {
     position: absolute;
@@ -20,6 +37,11 @@
     display: block;
     cursor: pointer;
   }
+
+  .message-content {
+    padding-right: 0px;
+  }
+  
 }
 
 .message-info {
@@ -46,7 +68,4 @@
   text-align: center;
 }
 
-.message-content {
-  padding-right: 20px;
-}
 
