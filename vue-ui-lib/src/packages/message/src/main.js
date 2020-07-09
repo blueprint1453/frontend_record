@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Main from './main.vue' 
 import PopupManager from '../../../utils/popup-manager';
+import { isVNode } from '../../../utils/vdom';
 
 const MessageCtor = Vue.extend(Main)
 let instances = []
@@ -19,10 +20,15 @@ const Message = function(options) {
   options.onClose = function() {
     Message.close(id, userClose)
   }
+  
   const instance = new MessageCtor({
-    el: document.createElement('div'),
     data: options
-  })
+  });
+  if (isVNode(options.message)) {
+    instance.$slots.default = options.message
+    options.message = null
+  }
+  instance.$mount()
   instance.id = id
   document.body.appendChild(instance.$el)
   instance.$el.style.zIndex = PopupManager.nextZIndex()

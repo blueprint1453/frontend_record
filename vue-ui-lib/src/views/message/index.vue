@@ -6,6 +6,7 @@
       <span @click="openSuccessMessage">成功</span>
       <span @click="openErrorMessage">错误</span>
       <span @click="openTextCenterMessage">文字居中</span>
+      <span @click="openVn">VNode</span>
     </div>
     <div class="btns">
       <span @click="goHome">返回</span>
@@ -49,6 +50,15 @@ export default {
         type: 'info',
         center: true,
         showClose: true
+      });
+    },
+    openVn() {
+      const h = this.$createElement;
+      this.$message({
+        message: h('p', null, [
+          h('span', null, '内容可以是 '),
+          h('i', { style: 'color: teal' }, 'VNode')
+        ])
       });
     },
     goHome() {
