@@ -1,5 +1,6 @@
 <template>
-  <div 
+  <div
+    v-show="visible"
     class="message"
     :class="[
       'message-' + type,
@@ -10,7 +11,7 @@
     <slot>
       <p class="message-content">{{message}}</p>
     </slot>
-    <span class="icon-close" v-if="showClose" @click="close" >x<span>
+    <span class="icon-close" v-if="showClose" @click="close" >x</span>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ export default {
     messageStyle() {
       let style = {}
       style.top = this.verticalOffset + 'px'
+      return style
     }
   },
   mounted() {

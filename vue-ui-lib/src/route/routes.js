@@ -4,6 +4,8 @@ const About = () => import('../views/about/index.vue')
 const List = () => import('../views/list/index.vue')
 const File = () => import('../components/Upload.vue')
 const Layout = () => import('../views/Layout/index.vue')
+const Message = () => import('../views/message/index.vue')
+
 const routes = [
   {
     component: Home,
@@ -24,6 +26,10 @@ const routes = [
   {
     component: Layout,
     path: '/layout'
+  },
+  {
+    component: Message,
+    path: '/message'
   },
 ]
 

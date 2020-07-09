@@ -7,14 +7,18 @@
   padding: 6px 20px;
   background: #fff;
   font-size: 14px;
+  border-radius: 2px;
+  transition: all 0.4;
 
   .icon-close {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 4px;
     right: 20px;
     color: #bbb;
-    font-size: 14px;
+    font-size: 16px;
+    height: 16px;
+    display: block;
+    cursor: pointer;
   }
 }
 
