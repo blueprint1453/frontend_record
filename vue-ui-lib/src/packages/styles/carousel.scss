@@ -1,0 +1,96 @@
+
+.carousel {
+  overflow: hidden;
+  position: relative;
+  .carousel__content {
+    position: relative;
+    height: 300px;
+  }
+  .carousel-item {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .carousel__arrow {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    display: block;
+    line-height: 36px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .carousel__arrow--left {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  .carousel__arrow--right {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+
+  .carousel_indicators {
+    position: absolute;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .carousel_indicators--horizontal {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+  }
+
+  .carousel_indicators--vertical {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 16px;
+  }
+
+  .carousel_indicators--outside {
+    padding: 16px;
+    text-align: center;
+  }
+
+  .carousel_indicator {
+    background: rgba(0, 0, 0, 0.05);
+    .is-active, &:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+    
+  }
+
+  .carousel_indicator--horizontal {
+    display: inline-block;
+    margin-right: 10px;
+    height: 3px;
+    width: 30px;
+    border-radius: 1px;
+  }
+
+  .carousel_indicators--vertical {
+    display: block;
+    margin-bottom: 10px;
+    width: 3px;
+    height: 24px;
+    border-radius: 1px;
+  }
+}
