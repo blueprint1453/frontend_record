@@ -5,6 +5,7 @@ const List = () => import('../views/list/index.vue')
 const File = () => import('../components/Upload.vue')
 const Layout = () => import('../views/Layout/index.vue')
 const Message = () => import('../views/message/index.vue')
+const Switch = () => import('../views/switch/index.vue')
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
   {
     component: Message,
     path: '/message'
+  },
+  {
+    component: Switch,
+    path: '/switch'
   },
 ]
 
