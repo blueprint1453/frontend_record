@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+   img {
+     height: 100%;
+   }
+  </style>
+</head>
+<body>
+    <input type="file" id="file-input" name="fileContent">
+    <div class="text"></div>
+    <div class="img-container" style="width: 400px;height: 400px;border: 1px solid #ddd;" draggable="true">
+        drop your image here
+    </div>
+    <div class="img-container-paste" style="width: 400px;height: 400px;border: 1px solid #ddd;"  contenteditable="true">
+      paste img here...
+    </div>
+    <script>
+      let input = document.querySelector('#file-input')
+      let text = document.querySelector('.text')
+      input.addEventListener('change', function(e) {
+        let formData = new FormData()
+        console.log(this.files)
+        formData.append('file', this.files[0])
+        console.log(formData)
+        // 使用fileReader
+        let fileReader = new FileReader()
+        fileReader.readAsDataURL(this.files[0])
+        fileReader.onload = function (result) {
+          console.log(this)
+          text.innerHTML = this.result
+          let view = new Uint8Array(this.result);
+          console.log(view);
+        }
+      })
+
+      // 拖拽
+      let imgContainer = document.querySelector('.img-container')
+      imgContainer.addEventListener('dragover', function(e) {
+        e.preventDefault()
+      })
+      imgContainer.addEventListener('drop', function(event){
+        event.preventDefault();
+        // 数据在event的dataTransfer对象里
+        console.log(event)
+        let fileReader = new FileReader()
+        let file = event.dataTransfer.files[0];
+
+        // 然后就可以使用FileReader进行操作
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = function() {
+          let img = new Image()
+          img.src = this.result
+          imgContainer.appendChild(img)
+        }
+
+
+        // 或者是添加到一个FormData
+        let formData = new FormData();
+        formData.append("fileContent", file);
+      })
+
+      // 粘贴
+      let imgPaste = document.querySelector('.img-container-paste')
+      imgPaste.addEventListener('paste', function(e) {
+        console.log(e)
+        let fileReader = new FileReader()
+        fileReader.readAsDataURL(e.clipboardData.files[0])
+        fileReader.onload = function() {
+          let img = new Image()
+          img.src = this.result
+          imgPaste.appendChild(img)
+        }
+        
+      })
+
+      let data = {hello: "world"};
+      let blob = new Blob([JSON.stringify(data)],
+        {type : 'application/json'});
+        console.log(blob)
+    </script>
+</body>
+</html>

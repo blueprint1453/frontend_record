@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 简单来讲setTimeout的延迟时间不包括自身回调所占用的时间 也就是说setTimeout是在上一次回调执行之后才开启的定时
+  // let n = 4
+  // console.time(`${n}`)
+  // setTimeout(function foo() {
+  //   console.timeEnd(`${n}`)
+  //   for (let i = 0; i < 100000000; i++) {}
+  //   if (--n) {
+  //     console.time(`${n}`)
+  //     setTimeout(foo, 1000)
+  //   }
+  // }, 1000)
+
+  
+
+  // setInterval的延迟执行时间包含自身回调执行所占用的时间 也就是说setInterval是在上一次回调执行时就已经开启了定时
+  let m = 4
+  console.time(`${m}`)
+  const id = setInterval(() => {
+    console.timeEnd(`${m}`)
+    for (let i = 0; i < 100000000; i++) {}
+    if (--m === 0) clearInterval(id)
+    console.time(`${m}`)
+  }, 1000)
+  </script>
+</body>
+</html>

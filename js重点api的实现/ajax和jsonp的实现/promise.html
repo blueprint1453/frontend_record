@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const PENDING = "pending";
+    const FULFILLED = "fulfilled";
+    const REJECTED = "rejected";
+
+    function Promise(excutor) {
+      this.status = PENDING
+      this.value = undefined
+      this.reason = undefined
+      this.onFullfilledCallbacks = []
+      this.onRejectedCallbacks = []
+      
+      var that = this
+      function resolve(value) {
+        setTimeout(() => {
+          if (that.status === PENDING) {
+            that.status = FULFILLED
+            that.value = value
+            that.onFullfilledCallbacks.forEach(cb => {
+              cb(that.value)
+            });
+          }
+        });
+      }
+
+      function reject(reason) {
+       if (that.status === PENDING) {
+         setTimeout(() => {
+           that.status = REJECTED
+           that.reason = reason
+           that.onRejectedCallbacks.forEach(cb => cb(reason))
+         })
+       }
+      }
+
+      try {
+        excutor(resolve, reject)
+      } catch (error) {
+        reject(error)
+      }
+    }
+
+    function resolvePromise(newP, oldP, resolve, reject) {
+      console.log('resolvePromise')
+    }
+    
+    Promise.prototype.then = function(onfullFilled, onRejected) {
+      const that = this
+      onfullFilled = typeof onfullFilled === 'function' ? onfullFilled : value => value
+      onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason}
+
+      if (that.status === PENDING) {
+        console.log('that.status === PENDING')
+        return newPromise = new Promise((resolve, reject) => {
+          this.onFullfilledCallbacks.push((value) => {
+            try {
+              let x = onfullFilled(value)
+              resolvePromise(newPromise, x, resolve, reject);
+            } catch (error) {
+              reject(error)
+            }
+          })
+          that.onRejectedCallbacks.push(reason => {
+            try {
+              let y = onRejected(reason)
+              resolvePromise(newPromise, y, resolve, reject);
+            } catch (error) {
+              reject(error)
+            }
+          })
+        })
+      }
+    }
+
+    var p = new Promise((resolve, reject) => {
+      var num = (Math.random()*10).toFixed()
+      resolve(num)
+    })
+    p.then()
+  </script>
+</body>
+
+</html>

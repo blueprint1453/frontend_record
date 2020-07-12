@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <script>
     // 模拟实现new功能
     function __new(constructor) {
       var obj = {}
@@ -82,6 +72,30 @@
     var oo = Object.__create__2(parent)
     console.log(oo)
     console.log(Object.getPrototypeOf(oo) === parent)
-  </script>
-</body>
-</html>
+
+
+
+  // new的其他版本实现
+    function newFn(Fn, ...rest) {
+      let obj = {}
+      let symbol = Symbol()
+      obj[symbol] = Fn
+      Object.setPrototypeOf(obj, Fn.prototype)
+      var result = obj[symbol](...rest)
+      delete obj[symbol]
+      return result instanceof Object ? result : obj
+    }
+  
+    function Person(name, age) {
+      this.name = name
+      this.age = age
+    }
+  
+    Person.prototype = {
+      getName() {
+        return this.name
+      }
+    }
+    
+    var person = newFn(Person, 'jack', 18)
+    console.log(person, person.getName())

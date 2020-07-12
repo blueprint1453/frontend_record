@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
+
       // 1. 基础版 不考虑new调用
       Function.prototype._bind = function() {
         var args = Array.prototype.slice.call(arguments);
@@ -87,6 +78,23 @@
       new bound3()
       // 参考链接
       // https://juejin.im/post/5d8b0d856fb9a04e3141fcd6
-    </script>
-  </body>
-</html>
+
+
+      Function.prototype._bind = function(context, ...rest) {
+        context = context || window
+        var that = this
+        return function bindFn(...args) {
+          var args = args.concat(rest)
+          if (this instanceof bindFn) {
+            this.that = that
+            var result = this.that(...args)
+            delete this.that
+            return result
+          }
+          context.fn = that
+          var result = context.fn(...args)
+          delete context.fn
+          return result
+        }
+      }
+  

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var script = document.createElement('script')
+    script.src = './index.js'
+    document.body.appendChild(script)
+    script.onload = function() {
+      console.log('script onload')
+    }
+  </script>
+  <script>
+    console.log('script 2')
+  </script>
+  <script>
+    console.log('script 3')
+  </script>
+</body>
+
+</html>

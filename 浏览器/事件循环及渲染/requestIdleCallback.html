@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var i = 0
+  // function task() {
+  //   console.log(i++)
+  //   if (i === 200) return
+  //   requestAnimationFrame(task)
+  // }
+
+  // task()
+
+  function task2() {
+    while(i < 1000) {
+      console.log(i)
+      i++
+    }
+  }
+  task2()
+  // 浏览器会在空闲的时机执行requestIdleCallback里面的回调 比如requestAnimationFrame之间空隙如果没有别的任务执行，
+  // requestIdleCallback的回调就会执行，但如果这个空隙内还有其他的繁重的任务，那么requestIdleCallback的回调在这个间隙内不会执行
+  requestIdleCallback(() => {
+    console.log('requestIdleCallback')
+  })
+  </script>
+</body>
+</html>

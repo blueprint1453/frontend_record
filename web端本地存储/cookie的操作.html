@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="./cookieUtil.js"></script>
+  <script>
+    function getFutureUTCString(seconds) {
+      var now = new Date().getTime()
+      var future = now + seconds * 1000
+      return new Date(future).toUTCString()
+    }
+    cookieUtil.setItem({
+      key: 'name',
+      value: 'jack',
+      expires: getFutureUTCString(30),
+      path: '/'
+    })
+
+    cookieUtil.setItem({
+      key: 'password',
+      value: '123456',
+      expires: getFutureUTCString(30),
+      path: '/'
+    })
+   
+    console.log(document.cookie)
+    console.log(cookieUtil.getItem('name'))
+    setTimeout(function() {
+      cookieUtil.removeItem('name', '/')
+      console.log('cookie ', document.cookie)
+    }, 6000)
+  </script>
+</body>
+</html>

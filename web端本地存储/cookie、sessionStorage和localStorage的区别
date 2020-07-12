@@ -1,0 +1,5 @@
+
+1. cookie前后端都可以设置，会随http请求自动发送到服务器
+2. sessionStorage和localStorage能够存储较多的内容，cookie只能存储小数据量的数据
+3. cookie的有效期为设置的时间，没设置默认为关闭浏览器就失效，sessionStorage的有效期在当前浏览器窗口关闭后会失效，localStorage的有效期默认为永久，除非手动删除
+4. cookie有path概念，子路径可以访问父路径的cookie

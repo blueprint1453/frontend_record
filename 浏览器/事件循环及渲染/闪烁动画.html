@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 宏任务之间不一定会伴随着浏览器绘制，但没有时间间隔或间隔时间太短的话，以下的两个重绘很可能只会发生最后一个
+     * 所以以下代码你看不到颜色切换的闪烁，除非加入足够的延迟时间 比如100ms
+     */
+    // setTimeout(() => {
+    //   document.body.style.background = "green"
+    //   setTimeout(() => {
+    //     document.body.style.background = "red"
+    //   })
+    // })
+  
+
+
+    // requestAnimationFrame在重新渲染屏幕之前执行，非常适合用来做动画
+    //   let i = 200
+    //   function runAnimation() {
+    //     document.body.style.background = i % 2 === 0 ? "red" : "blue"
+    //     i--
+    //     if (i === 0) return
+    //     requestAnimationFrame(runAnimation)
+    //   }
+
+    //   runAnimation()
+
+    //  function count() {
+    //   console.log(i)
+    //   requestAnimationFrame(count)
+    //  }
+    //  count()
+
+
+   // 单没有时间间隔或间隔时间太短的话 浏览器会合并这两个定时器任务
+    // setTimeout(() => {
+    //   console.log("sto")
+    //   requestAnimationFrame(() => console.log("rAF"))
+    // })
+    // setTimeout(() => {
+    //   console.log("sto")
+    //   requestAnimationFrame(() => console.log("rAF"))
+    // })
+
+    // queueMicrotask(() => console.log("mic"))
+    // queueMicrotask(() => console.log("mic"))
+
+    // mic
+    // mic
+    // sto
+    // rAF
+    // sto
+    // rAF
+    
+
+    // requestIdleCallback 是浏览器提供给我们的空闲调度算法
+    // 在渲染屏幕之后执行，并且是否有空执行要看浏览器的调度，如果你一定要它在某个时间内执行，请使用 timeout参数。
+    window.requestIdleCallback((deadline) => {
+      // 50ms
+      console.log(deadline.timeRemaining())
+    })
+  </script>
+</body>
+
+</html>
